@@ -1,0 +1,88 @@
+version: '2'
+services:
+ # LoadBalancer - Nginx integrado com o consul template para gerar dinamicamente os upstreams para os serviços http
+  load-balancer:
+    build: 
+      context: "./"
+    depends_on:
+      - consul
+    ports:
+      - "80:80"
+  consul:
+    hostname: consul
+    image: "gliderlabs/consul-server:latest"
+    ports:
+      - "8300:8300"
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:53/udp"
+    command: "-bootstrap"
+  registrator:
+    image: gliderlabs/registrator:master
+    depends_on:
+      - consul
+    dns: $BALANCER_IP
+    command:
+      #-internal -resync 600 consul://consul:8500
+       -useIpFromLabel SERVICE_IP -resync 600 consul://$BALANCER_IP:8500  ## SUBSTITUIR POR VARIAVEL DE AMBIENTE - $BALANCER_IP
+    volumes:
+      - "/var/run/docker.sock:/tmp/docker.sock"
+  influxsrv: # db que armazena os dados de monitoramento
+    image: influxdb:1.1.4-alpine
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+    expose:
+      - "8090"
+      - "8099"
+    environment:
+      - PRE_CREATE_DB=cadvisor
+    labels:
+       - "SERVICE_NAME=influxdb"
+       - "SERVICE_TAGS=production,monitoramento,influxdb"
+    depends_on:
+     - "consul"
+  cadvisor: # Coleta metricas dos containers em execução
+    image: google/cadvisor:v0.24.1
+    command: -storage_driver=influxdb -storage_driver_db=cadvisor -storage_driver_host=influxsrv:8086
+    ports:
+      - "9090:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    depends_on: 
+      - "consul"
+      - "influxsrv"
+    labels:
+       - "SERVICE_NAME=cadvisor"
+       - "SERVICE_TAGS=production,monitoramento,cadvisor"
+  grafana: # UI para acompanhar as métricas
+    image: "grafana/grafana"
+    environment:
+      - "GF_SECURITY_ADMIN_PASSWORD=irpfonline"
+    ports:
+      - "8081:3000"
+    labels:
+      - 'SERVICE_NAME=monitoramento'
+      - 'SERVICE_TAGS=production,monitoramento,grafana,3000'
+    environment:
+      - INFLUXDB_HOST=localhost
+      - INFLUXDB_PORT=8086
+      - INFLUXDB_NAME=cadvisor
+      - INFLUXDB_USER=root
+      - INFLUXDB_PASS=root
+    depends_on: 
+      - "consul"
+      - "influxsrv"
+      - "cadvisor"
+    labels:
+       - "SERVICE_NAME=grafana"
+       - "SERVICE_TAGS=production,monitoramento,grafana"
+volumes:  
+  db-data:
+    driver: local
+networks:
+  default:
+    driver: bridge
