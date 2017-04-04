@@ -1,4 +1,5 @@
 FROM abner/ts-node
+RUN addgroup -S node && adduser -S -g node node 
 
 EXPOSE 3000
 

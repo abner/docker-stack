@@ -13,4 +13,6 @@ set -e
 #	exec su-exec redis "$0" "$@"
 #fi
 
+echo -e "USER: $(whoami) - $(id):$(gid)"
+
 exec "$@"
