@@ -9,7 +9,7 @@ app.set('port', process.env.PORT || 3000)
 app.get('/', function (req, res) {
   res.send(`
   <script src="/reload/reload.js"></script>
-  <h1>Hello World 2</h1>`)
+  <h1>Page with live changes</h1>`)
 })
 
 

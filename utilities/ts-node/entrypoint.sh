@@ -1,5 +1,5 @@
 #!/bin/sh
-set -e
+#set -e
 
 # first arg is `-f` or `--some-option`
 # or first arg is `something.conf`
@@ -13,6 +13,11 @@ set -e
 #	exec su-exec redis "$0" "$@"
 #fi
 
-echo -e "USER: $(whoami) - $(id):$(gid)"
+
+echo -e "USER: $(whoami) - $UID:$GID"
+
+yarn
+
+chown $UID:$GID -R .
 
 exec "$@"
