@@ -1,5 +1,5 @@
 #!/bin/sh
 deluser node
-addgroup  -g 888 888
-adduser -g " " -u 801294985 -G 888 801294985
-chown 801294985:888 /usr/src/app
+addgroup --gid 1000 app-group
+adduser --system --home /usr/src/app --gecos " " --no-create-home --uid 1000 --gid 1000 app
+chown app:app-group /usr/src/app

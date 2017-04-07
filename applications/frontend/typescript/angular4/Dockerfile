@@ -11,19 +11,44 @@ RUN \
 
 RUN npm install -g @angular/cli@1.0.0 watchman typings ts-node
 
-RUN xvfb :99 -ac 
+RUN ng set packageManager=yarn --global
+#RUN xvfb :99 -ac 
 
 RUN export DISPLAY=:99.0
 
+RUN mkdir -p usr/src/app
+RUN mkdir -p /templates
+
 WORKDIR /usr/src/app
+
+
+COPY ./create-user.sh /usr/local/bin/create-user
+
+RUN /usr/local/bin/create-user
+RUN chown -R app:app-group /usr/src/app
+
+
+
+RUN chown app:app-group /templates/ -R
+
+RUN chown app:app-group /usr/src/app/ -R
+
+
+RUN ng set packageManager=yarn --global
+
+RUN cd /templates/; ng new template-app --directory --style scss --routing true --prefix app
+
+RUN chown -R app:app-group /usr/src/app
+
+USER root
 
 COPY ./docker-entrypoint.sh /usr/local/bin/entrypoint
 
 RUN chmod +x /usr/local/bin/entrypoint
 
-VOLUME /usr/src/app
-
 # Install dependencies
 ENTRYPOINT "entrypoint"
+
+EXPOSE 4200
 
 CMD ["yarn", "start"]
