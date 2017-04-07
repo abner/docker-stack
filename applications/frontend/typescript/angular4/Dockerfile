@@ -1,4 +1,4 @@
-FROM node:7
+FROM node:6.10.0
 
 # Install Chromium & Xvfb
 RUN \
