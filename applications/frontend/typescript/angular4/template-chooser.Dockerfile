@@ -1,0 +1,2 @@
+FROM abner/ts-node
+

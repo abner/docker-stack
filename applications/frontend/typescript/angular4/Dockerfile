@@ -29,26 +29,34 @@ RUN chown -R app:app-group /usr/src/app
 
 
 
-RUN chown app:app-group /templates/ -R
+
 
 RUN chown app:app-group /usr/src/app/ -R
 
 
 RUN ng set packageManager=yarn --global
 
-RUN cd /templates/; ng new template-app --directory --style scss --routing true --prefix app
+#RUN cd /templates/; ng new template-app --directory --style scss --routing true --prefix app
 
 RUN chown -R app:app-group /usr/src/app
 
-USER root
+#USER root
 
 COPY ./docker-entrypoint.sh /usr/local/bin/entrypoint
 
 RUN chmod +x /usr/local/bin/entrypoint
 
-# Install dependencies
-ENTRYPOINT "entrypoint"
-
 EXPOSE 4200
 
-CMD ["yarn", "start"]
+ENTRYPOINT ["sh", "/usr/local/bin/entrypoint"]
+
+
+#COPY cli /usr/src/cli
+
+#RUN cd /usr/src/cli; yarn
+
+COPY templates /templates
+RUN chown app:app-group /templates/ -R
+ENV TEMPLATE_NAME=angular@4.0.1-jest
+
+CMD ["ng", "serve", "-H", "0.0.0.0"]

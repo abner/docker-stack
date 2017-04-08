@@ -2,5 +2,6 @@
 .gitignore
 .env*
 node_modules
+cli/node_modules
 docker-compose*.yml
 apps
