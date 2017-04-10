@@ -1,0 +1,16 @@
+
+
+version: '2.0'
+
+services:
+  angular-app:
+    image: abner/angular4-base:alpine-onbuild-with-modules
+    volumes: 
+      - ./workspace/my-app/:/usr/src/app/
+    ports:
+      - 4200:4200
+    environment: 
+      - UID=1000
+      - GID=1000
+      - NG_APP_NAME=my-app2
+      - NG_APP_PREFIX=myApp2

@@ -2,7 +2,7 @@ FROM node:6.10.0-alpine
 
 RUN npm i -g typescript ts-node
 
-RUN mkdir -p /usr/src/appts
+RUN mkdir -p /usr/src/app
 
 WORKDIR /usr/src/app
 
