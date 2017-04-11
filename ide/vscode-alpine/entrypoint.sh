@@ -14,13 +14,10 @@ echo "APP DIR --------"
 echo $APP_DIR
 
 
-function create_user {
-    mkdir -p /home/app/.ssh/ && ssh-keyscan github.com >> /home/app/.ssh/known_hosts && ssh-keyscan gitlab.com >> /home/app/.ssh/known_hosts
-
-}
-
-
-
+mkdir -p /home/app/.ssh/ && ssh-keyscan github.com >> /home/app/.ssh/known_hosts && ssh-keyscan gitlab.com >> /home/app/.ssh/known_hosts
+addgroup --gid $GID app-group
+adduser --system --home /home/app --gecos " " --no-create-home --uid $UID --gid $GID app
+chown app:app-group /home/app
 
 # Inicializar servidor alm
 cat /home/app/ng-tsserver.sh | bash
