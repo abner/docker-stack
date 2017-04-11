@@ -2,9 +2,13 @@ version: '2'
 services:
 
   vscode:
-    image: abner/vscode-ubuntu16
+    build:
+      context: ./
     environment:
       - "DISPLAY=${DISPLAY}"
+      - "MYUSERNAME=abner"
+      - "MYUID=1000"
+      - "MYGID=1000"
     hostname: intellij
     tty: true
     stdin_open: true
@@ -13,4 +17,4 @@ services:
       - ${HOME}:${HOME}
       - /mnt/filer/work:/mnt/filer/work
       - /tmp/.X11-unix:/tmp/.X11-unix
-command: vscode
+    command: vscode

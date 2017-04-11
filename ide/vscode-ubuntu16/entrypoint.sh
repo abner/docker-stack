@@ -2,29 +2,29 @@
 
 
 #we deploy this using the target user (and target GOPATH define in ~/.bashrc"
-function installLinter {
-#source : https://github.com/Microsoft/vscode-go
-    su $MYUSERNAME bash -c 'set -x; source ~/.bashrc;
-    echo "we are deploying in $GOPATH";
-    chown -R $MYUID:$MYGID $GOPATH;
-    echo "Install more powerful linter to check code";
-    go get -u github.com/alecthomas/gometalinter;
-    gometalinter --install;
-    echo "For debugging we need to install delve";
-    go get github.com/derekparker/delve/cmd/dlv;
-    echo "Install go Helpers for VsCode";
-    go get -u -v github.com/nsf/gocode;
-    go get -u -v github.com/rogpeppe/godef;
-    go get -u -v github.com/golang/lint/golint;
-    go get -u -v github.com/lukehoban/go-outline;
-    go get -u -v sourcegraph.com/sqs/goreturns;
-    go get -u -v golang.org/x/tools/cmd/gorename;
-    go get -u -v github.com/tpng/gopkgs;
-    go get -u -v github.com/newhook/go-symbols;
-    go get -u -v golang.org/x/tools/cmd/guru;
-    echo "go packages installed" ; set +X
-    '
-}
+# function installLinter {
+# #source : https://github.com/Microsoft/vscode-go
+#     su $MYUSERNAME bash -c 'set -x; source ~/.bashrc;
+#     echo "we are deploying in $GOPATH";
+#     chown -R $MYUID:$MYGID $GOPATH;
+#     echo "Install more powerful linter to check code";
+#     go get -u github.com/alecthomas/gometalinter;
+#     gometalinter --install;
+#     echo "For debugging we need to install delve";
+#     go get github.com/derekparker/delve/cmd/dlv;
+#     echo "Install go Helpers for VsCode";
+#     go get -u -v github.com/nsf/gocode;
+#     go get -u -v github.com/rogpeppe/godef;
+#     go get -u -v github.com/golang/lint/golint;
+#     go get -u -v github.com/lukehoban/go-outline;
+#     go get -u -v sourcegraph.com/sqs/goreturns;
+#     go get -u -v golang.org/x/tools/cmd/gorename;
+#     go get -u -v github.com/tpng/gopkgs;
+#     go get -u -v github.com/newhook/go-symbols;
+#     go get -u -v golang.org/x/tools/cmd/guru;
+#     echo "go packages installed" ; set +X
+#     '
+# }
 
 
 echo "You are connecting with User ${MYUSERNAME}"
@@ -41,12 +41,12 @@ fi
 
 if [ "$1" == "vscode" ]; then
     
-    if [ ! -d /home/${MYUSERNAME}/go/src/github.com/alecthomas/gometalinter ]; then
-	# We are running a fresh install we install some packages
-	installLinter
-    else
-	echo "Go Linters already installed in your GOPATH.. Skipping"
-    fi
+    #if [ ! -d /home/${MYUSERNAME}/go/src/github.com/alecthomas/gometalinter ]; then
+	## We are running a fresh install we install some packages
+	#installLinter
+    #else
+	#echo "Go Linters already installed in your GOPATH.. Skipping"
+    #fi
     
     echo "Starting vscode $1, code"
     if [ $ID = 0 ];then
