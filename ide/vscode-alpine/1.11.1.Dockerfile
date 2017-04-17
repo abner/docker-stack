@@ -2,7 +2,7 @@ FROM alpine
 
 LABEL MAINTAINER="abner <contato@abner.io>"
 
-RUN apk update && apk add --no-cache sudo  xauth xfonts-utils unzip git zsh tmux libnotify  nss-dev xss-dev xtst-dev xss-dev && \
+RUN apk update && apk add --no-cache sudo ttf-dejavu ttf-ubuntu-font-family ttf-liberation git zsh tmux libnotify  nss-dev xss-dev xtst-dev xss-dev && \
      rm -rf /var/cache/apk
 
 COPY /tmp/VSCode-linux-x64/  /usr/apps/vscode/
