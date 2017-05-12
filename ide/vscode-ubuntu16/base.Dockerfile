@@ -56,7 +56,7 @@ RUN curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh && \
     updatedb
 
 
-RUN echo 'Creating user: ${MYUSERNAME} wit UID $UID' && \
+ONBUILD RUN echo 'Creating user: ${MYUSERNAME} wit UID $UID' && \
     mkdir -p /home/${MYUSERNAME} && \
     echo "${MYUSERNAME}:x:${MYUID}:${MYGID}:Developer,,,:/home/${MYUSERNAME}:/bin/bash" >> /etc/passwd && \
     echo "${MYUSERNAME}:x:${MYGID}:" >> /etc/group && \
